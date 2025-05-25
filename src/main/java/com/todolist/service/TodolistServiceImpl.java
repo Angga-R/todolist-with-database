@@ -18,11 +18,9 @@ public class TodolistServiceImpl implements TodolistService{
     public void showTodolist() {
         List<Todolist> todolist = todolistRepository.getAll();
 
-        for (int i = 0; i < todolist.size(); i++) {
-            Todolist todo = todolist.get(i);
-            int number = i + 1;
-            System.out.println(number + ". " + todo.getTodo() + " | " + todo.getDate());
-        }
+        todolist.forEach(todo -> {
+            System.out.println(todo.getId() + ". " + todo.getTodo() + " | " + todo.getDate());
+        });
     }
 
     @Override
@@ -33,6 +31,9 @@ public class TodolistServiceImpl implements TodolistService{
 
     @Override
     public void removeTodolist(int id) {
-
+        boolean isDeleted = todolistRepository.remove(id);
+        if (!isDeleted) {
+            System.err.println("- Number not found! -");
+        }
     }
 }

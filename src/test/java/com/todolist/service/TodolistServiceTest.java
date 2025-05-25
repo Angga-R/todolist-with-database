@@ -5,15 +5,9 @@ import com.todolist.repository.TodolistRepository;
 import com.todolist.repository.TodolistRepositoryImpl;
 import com.todolist.util.DatabaseUtil;
 import com.zaxxer.hikari.HikariDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class TodolistServiceTest {
 
@@ -33,7 +27,7 @@ public class TodolistServiceTest {
     void tearDown() throws SQLException {
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
-        statement.executeUpdate("DELETE FROM todo WHERE todo='test'");
+        statement.executeUpdate("DELETE FROM todo WHERE todo='Test'");
 
         statement.close();
         connection.close();
@@ -62,6 +56,35 @@ public class TodolistServiceTest {
         void testAdd() {
             todolistService.addTodolist("Test");
             todolistService.showTodolist();
+        }
+    }
+
+    @Nested
+    class RemoveTodolist {
+
+        @BeforeEach
+        void setUp() {
+            todolistRepository.add(new Todolist("Test", new Date(System.currentTimeMillis())));
+        }
+
+        @Test
+        void testRemoveSuccess() throws SQLException{
+            Connection connection = DatabaseUtil.getDataSource().getConnection();
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM todo WHERE todo='Test'");
+            if(resultSet.next()) {
+                todolistService.removeTodolist(resultSet.getInt("id"));
+            }
+
+            resultSet.close();
+            connection.close();
+            statement.close();
+        }
+
+        @Test
+        void testRemoveFailed() {
+            todolistService.removeTodolist(23245);
         }
     }
 }

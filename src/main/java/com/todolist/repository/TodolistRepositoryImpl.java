@@ -44,7 +44,7 @@ public class TodolistRepositoryImpl implements TodolistRepository{
         try(Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery("SELECT * FROM todo")) {
             List<Todolist> todolists = new ArrayList<>();
             while (resultSet.next()) {
-                todolists.add(new Todolist(resultSet.getString("todo"), resultSet.getDate("date")));
+                todolists.add(new Todolist(resultSet.getInt("id"), resultSet.getString("todo"), resultSet.getDate("date")));
             }
             return todolists;
         } catch (SQLException e) {
