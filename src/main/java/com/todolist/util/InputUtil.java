@@ -9,7 +9,6 @@ public class InputUtil {
     public static String input(String label){
 
         System.out.print(label + ": ");
-
         return scanner.nextLine();
     }
 }

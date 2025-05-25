@@ -19,7 +19,7 @@ public class TodolistServiceImpl implements TodolistService{
         List<Todolist> todolist = todolistRepository.getAll();
 
         todolist.forEach(todo -> {
-            System.out.println(todo.getId() + ". " + todo.getTodo() + " | " + todo.getDate());
+            System.out.println("| " + todo.getId() + " | " + todo.getTodo() + " | " + todo.getDate() + " |");
         });
     }
 
