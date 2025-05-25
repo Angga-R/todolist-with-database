@@ -30,7 +30,14 @@ public class TodolistRepositoryImpl implements TodolistRepository{
 
     @Override
     public boolean remove(int id) {
-        return false;
+        String sql = "DELETE FROM todo WHERE id=?";
+        try(Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            int isDeleted = statement.executeUpdate();
+            return isDeleted == 1;
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     @Override
