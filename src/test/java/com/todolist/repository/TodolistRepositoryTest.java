@@ -5,10 +5,7 @@ import com.todolist.util.DatabaseUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 public class TodolistRepositoryTest {
@@ -24,7 +21,7 @@ public class TodolistRepositoryTest {
         Connection connection = DatabaseUtil.getDataSource().getConnection();
         Statement statement = connection.createStatement();
 
-        statement.executeUpdate("DELETE FROM todo");
+        statement.executeUpdate("DELETE FROM todo WHERE todo='test'");
 
         connection.close();
         statement.close();
@@ -37,7 +34,7 @@ public class TodolistRepositoryTest {
 
         @Test
         void testAdd() {
-            todolistRepository.add("Test");
+            todolistRepository.add(new Todolist("Test", new Date(System.currentTimeMillis())));
         }
     }
 
@@ -46,7 +43,7 @@ public class TodolistRepositoryTest {
 
         @BeforeEach
         void setUp() {
-            todolistRepository.add("Test");
+            todolistRepository.add(new Todolist("Test", new Date(System.currentTimeMillis())));
         }
 
         @Test
@@ -80,7 +77,7 @@ public class TodolistRepositoryTest {
         @BeforeEach
         void setUp() {
             for (int i = 0; i < 3; i++) {
-                todolistRepository.add("Test");
+                todolistRepository.add(new Todolist("Test", new Date(System.currentTimeMillis())));
             }
         }
 

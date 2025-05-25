@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TodolistRepository {
 
-    void add(String todo);
+    void add(Todolist todolist);
 
     boolean remove(int id);
 

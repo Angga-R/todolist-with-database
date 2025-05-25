@@ -16,11 +16,11 @@ public class TodolistRepositoryImpl implements TodolistRepository{
     }
 
     @Override
-    public void add(String todo) {
+    public void add(Todolist todolist) {
         String sql = "INSERT INTO todo(todo, date) VALUES (?, ?)";
         try(Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, todo);
-            statement.setDate(2, new Date(System.currentTimeMillis()));
+            statement.setString(1, todolist.getTodo());
+            statement.setDate(2, todolist.getDate());
             statement.executeUpdate();
         } catch (SQLException exception) {
             throw new RuntimeException(exception);

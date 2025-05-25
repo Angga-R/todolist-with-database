@@ -3,6 +3,7 @@ package com.todolist.service;
 import com.todolist.Entity.Todolist;
 import com.todolist.repository.TodolistRepository;
 
+import java.sql.Date;
 import java.util.List;
 
 public class TodolistServiceImpl implements TodolistService{
@@ -26,7 +27,8 @@ public class TodolistServiceImpl implements TodolistService{
 
     @Override
     public void addTodolist(String todo) {
-
+        Todolist todolist = new Todolist(todo, new Date(System.currentTimeMillis()));
+        todolistRepository.add(todolist);
     }
 
     @Override
