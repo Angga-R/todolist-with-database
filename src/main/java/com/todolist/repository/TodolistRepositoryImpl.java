@@ -3,10 +3,9 @@ package com.todolist.repository;
 import com.todolist.Entity.Todolist;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TodolistRepositoryImpl implements TodolistRepository{
 
@@ -41,7 +40,15 @@ public class TodolistRepositoryImpl implements TodolistRepository{
     }
 
     @Override
-    public Todolist[] getAll() {
-        return new Todolist[0];
+    public List<Todolist> getAll() {
+        try(Connection connection = dataSource.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery("SELECT * FROM todo")) {
+            List<Todolist> todolists = new ArrayList<>();
+            while (resultSet.next()) {
+                todolists.add(new Todolist(resultSet.getString("todo"), resultSet.getDate("date")));
+            }
+            return todolists;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

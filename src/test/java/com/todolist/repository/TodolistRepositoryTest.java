@@ -1,5 +1,6 @@
 package com.todolist.repository;
 
+import com.todolist.Entity.Todolist;
 import com.todolist.util.DatabaseUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.*;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class TodolistRepositoryTest {
 
@@ -58,6 +60,7 @@ public class TodolistRepositoryTest {
                 Assertions.assertTrue(isDeleted);
             }
 
+            resultSet.close();
             connection.close();
             statement.close();
 
@@ -67,6 +70,28 @@ public class TodolistRepositoryTest {
         void testRemoveFailed() {
             boolean isDeleted = todolistRepository.remove(23);
             Assertions.assertFalse(isDeleted);
+        }
+    }
+
+    @Nested
+    class GetAll {
+
+
+        @BeforeEach
+        void setUp() {
+            for (int i = 0; i < 3; i++) {
+                todolistRepository.add("Test");
+            }
+        }
+
+        @Test
+        void testGetAll() {
+            List<Todolist> todolist = todolistRepository.getAll();
+
+            Assertions.assertNotNull(todolist);
+            todolist.forEach(todo -> {
+                System.out.println(todo.getTodo() + " | " + todo.getDate());
+            });
         }
     }
 }
